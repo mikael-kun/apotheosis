@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>APOTHEOSIS — Mausoleum of Chrome 電脳鎮魂歌</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #060509;
+    --bg-raised: #0e0c15;
+    --chrome: #eae7f2;
+    --chrome-dim: #948da8;
+    --hairline: rgba(234,231,242,0.1);
+    --indigo: #6a5a9c;
+    --lilac: #b3a3e0;
+    --magenta: #c6488a;
+    --violet: #8b5cf6;
+    --corruption: 0;
+    --accent: var(--indigo);
+    --bar-h: 5px;
+    --player-h: 76px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--chrome);
+    font-family:'JetBrains Mono', monospace;
+    overflow-x:hidden;
+  }
+
+  /* ---------- fixed progress rail, full page width ---------- */
+  #rail{
+    position:fixed; top:0; left:0; width:100%; height:var(--bar-h);
+    background:rgba(255,255,255,0.05);
+    z-index:100;
+    cursor:pointer;
+  }
+  #rail-fill{
+    height:100%; width:0%;
+    background:linear-gradient(90deg, var(--indigo), var(--accent));
+    box-shadow:0 0 12px 1px var(--accent);
+    transition:background 0.6s ease;
+  }
+  #rail-glow{
+    position:absolute; top:0; left:0; height:100%; width:100%;
+    pointer-events:none; opacity:0.5;
+    background:linear-gradient(90deg, transparent, var(--accent), transparent);
+    mix-blend-mode:screen;
+  }
+
+  /* ---------- vertical spine, runs the full page length ---------- */
+  #spine{
+    position:fixed; left:0; top:0; width:3px; height:100vh;
+    background:var(--spine-gradient, linear-gradient(180deg, var(--indigo), var(--violet), var(--magenta), var(--indigo)));
+    opacity:0.55;
+    z-index:90;
+  }
+  #spine-marker{
+    position:fixed; left:-3px; top:0; width:9px; height:9px; border-radius:50%;
+    background:var(--accent);
+    box-shadow:0 0 10px 2px var(--accent);
+    transform:translateY(-100px);
+    transition:background 0.6s ease;
+    z-index:92;
+    pointer-events:none;
+  }
+  .spine-tick{
+    position:fixed; left:0; width:9px; height:1px;
+    background:rgba(232,232,240,0.35);
+    z-index:91; cursor:pointer;
+  }
+  .spine-tick:hover{background:var(--chrome);}
+
+  /* ---------- header ---------- */
+  header{
+    padding:calc(var(--bar-h) + 48px) 32px 56px;
+    max-width:980px; margin:0 auto;
+    border-bottom:1px solid var(--hairline);
+    display:grid;
+    grid-template-columns:260px 1fr;
+    gap:40px;
+    align-items:start;
+  }
+  .lp-art{
+    width:100%; border-radius:2px;
+    border:1px solid var(--hairline);
+    display:block;
+  }
+  .catalog{
+    display:flex; gap:10px; flex-wrap:wrap;
+    font-size:11px; color:var(--chrome-dim); letter-spacing:0.04em;
+    margin:14px 0 0;
+  }
+  .catalog span:not(:last-child)::after{content:'/'; margin-left:10px; color:var(--hairline);}
+  .eyebrow{
+    font-size:12px; letter-spacing:0.18em; text-transform:uppercase;
+    color:var(--chrome-dim); margin:0 0 16px;
+  }
+  h1{
+    font-family:'Chakra Petch', sans-serif;
+    font-weight:700;
+    font-size:clamp(28px, 5vw, 46px);
+    line-height:1.02;
+    letter-spacing:-0.01em;
+    margin:0 0 8px;
+  }
+  h1 .kanji{
+    display:block;
+    font-weight:500;
+    font-size:0.5em;
+    color:var(--chrome-dim);
+    letter-spacing:0.1em;
+    margin-top:10px;
+  }
+  .liner{
+    margin-top:20px; font-size:13px; line-height:1.9;
+    color:var(--chrome-dim); max-width:46ch;
+  }
+  .liner .jp{color:var(--chrome);}
+  .meta-row{
+    display:flex; align-items:center; gap:12px;
+    margin-top:24px; font-size:13px; color:var(--chrome-dim);
+  }
+  .meta-row .dot{width:4px;height:4px;background:var(--chrome-dim);border-radius:50%;}
+
+  /* ---------- act dividers (five-act story structure) ---------- */
+  .act-divider{
+    padding:56px 0 0;
+  }
+  .act-divider:first-child{padding-top:0;}
+  .act-divider .act-row{
+    display:flex; align-items:center; gap:16px;
+    font-family:'Chakra Petch', sans-serif;
+    font-size:13px; letter-spacing:0.16em; color:var(--chrome-dim);
+    text-transform:uppercase;
+  }
+  .act-divider .act-row::after{
+    content:''; flex:1; height:1px; background:var(--hairline);
+  }
+  .act-divider .act-name{color:var(--chrome); font-weight:600;}
+  .act-divider .act-desc{
+    margin-top:8px; font-size:12px; color:var(--chrome-dim);
+    max-width:60ch; line-height:1.6;
+  }
+
+  /* ---------- track sections ---------- */
+  main{max-width:980px; margin:0 auto; padding:0 32px calc(var(--player-h) + 80px);}
+  .track{
+    display:grid;
+    grid-template-columns:180px 1fr;
+    gap:32px;
+    padding:56px 0;
+    border-bottom:1px solid var(--hairline);
+    position:relative;
+  }
+  .track:last-child{border-bottom:none;}
+  .track-num{
+    font-family:'Chakra Petch', sans-serif;
+    font-size:14px; color:var(--chrome-dim);
+    letter-spacing:0.1em;
+    padding-top:4px;
+  }
+  .cover{
+    width:180px; height:180px; border-radius:4px;
+    position:relative; overflow:hidden;
+    background-color:var(--bg-raised);
+    background-size:cover;
+    background-position:center;
+    border:1px solid var(--hairline);
+    cursor:pointer;
+  }
+  .cover::after{
+    content:'';
+    position:absolute; inset:0;
+    background:repeating-linear-gradient(0deg, rgba(255,255,255,0.02) 0px, rgba(255,255,255,0.02) 1px, transparent 1px, transparent 3px);
+    opacity:calc(var(--corruption) * 0.6);
+  }
+  .cover .play-btn{
+    position:absolute; inset:0;
+    display:flex; align-items:center; justify-content:center;
+    background:rgba(8,8,11,0.35);
+    opacity:0; transition:opacity 0.2s ease;
+  }
+  .cover:hover .play-btn{opacity:1;}
+  .cover.is-playing .play-btn{opacity:1; background:rgba(8,8,11,0.55);}
+  .play-btn svg{width:34px; height:34px; fill:var(--chrome);}
+
+  .track-body{display:flex; flex-direction:column; gap:2px;}
+  .title-row{display:flex; align-items:baseline; gap:10px; flex-wrap:wrap;}
+  .track-title{
+    font-family:'Chakra Petch', sans-serif;
+    font-weight:600;
+    font-size:24px;
+    margin:0;
+    letter-spacing:-0.01em;
+  }
+  .track-title-jp{
+    font-size:13px; color:var(--chrome-dim); letter-spacing:0.04em;
+    margin-top:4px;
+  }
+  .pill{
+    font-size:10px; padding:2px 8px; border-radius:2px;
+    border:1px solid var(--hairline);
+    color:var(--chrome-dim);
+    letter-spacing:0.05em;
+  }
+  .duration{
+    font-size:13px; color:var(--chrome-dim); margin-top:6px;
+  }
+  .style-line{
+    font-size:12px; color:var(--lilac); letter-spacing:0.03em; margin-top:10px;
+  }
+  .shot-line{
+    font-size:11px; color:var(--chrome-dim); letter-spacing:0.04em; margin-top:4px;
+    text-transform:uppercase; font-family:'Chakra Petch', sans-serif;
+  }
+  .story{
+    margin-top:12px; font-size:13px; line-height:1.75;
+    color:var(--chrome); opacity:0.85; max-width:62ch;
+  }
+  .mood-row{
+    display:flex; align-items:center; gap:8px; margin-top:14px;
+    font-size:11px; letter-spacing:0.05em; color:var(--chrome-dim); text-transform:uppercase;
+  }
+  .mood-row .swatch{width:8px; height:8px; border-radius:50%; flex-shrink:0;}
+  .hidden-symbol{
+    margin-top:10px; font-size:11px; font-style:italic; color:var(--chrome-dim);
+    opacity:0.75;
+  }
+  .hidden-symbol::before{content:'◇ '; opacity:0.6;}
+  .tags{
+    margin-top:14px; font-size:11px; line-height:1.8;
+    color:var(--chrome-dim);
+    max-width:60ch;
+    opacity:0.7;
+  }
+  .tags span{color:var(--chrome);}
+  .tags span::after{content:' · '; color:var(--chrome-dim);}
+  .tags span:last-child::after{content:'';}
+
+  /* corruption-driven title glitch */
+  .track.is-active .track-title{
+    text-shadow:
+      calc(var(--corruption) * 3px) 0 0 rgba(198,72,138, calc(var(--corruption) * 0.7)),
+      calc(var(--corruption) * -3px) 0 0 rgba(106,90,156, calc(var(--corruption) * 0.7));
+  }
+
+  /* ---------- fixed bottom player ---------- */
+  #player{
+    position:fixed; bottom:0; left:0; width:100%; height:var(--player-h);
+    background:rgba(15,15,20,0.92);
+    backdrop-filter:blur(10px);
+    border-top:1px solid var(--hairline);
+    display:flex; align-items:center; gap:20px;
+    padding:0 24px; z-index:100;
+  }
+  #player .np-art{
+    width:44px; height:44px; border-radius:3px; flex-shrink:0; overflow:hidden;
+    background-color:var(--bg-raised);
+    background-size:cover;
+    background-position:center;
+  }
+  #player .np-text{min-width:160px;}
+  #player .np-title{font-size:13px; font-weight:500; color:var(--chrome);}
+  #player .np-num{font-size:11px; color:var(--chrome-dim); margin-top:2px;}
+  .transport{display:flex; align-items:center; gap:14px;}
+  .transport button{
+    background:none; border:none; cursor:pointer; padding:6px;
+    color:var(--chrome); display:flex; align-items:center; justify-content:center;
+  }
+  .transport button svg{width:18px; height:18px; fill:currentColor;}
+  #play-pause{width:34px; height:34px; border-radius:50%; border:1px solid var(--hairline);}
+  #play-pause svg{width:14px; height:14px;}
+  .time-row{
+    display:flex; align-items:center; gap:10px; flex:1; font-size:11px; color:var(--chrome-dim);
+  }
+  #mini-rail{
+    flex:1; height:3px; background:rgba(255,255,255,0.08); position:relative; cursor:pointer; border-radius:2px;
+  }
+  #mini-rail-fill{
+    height:100%; width:0%; background:var(--accent); border-radius:2px;
+  }
+
+  footer{
+    max-width:980px; margin:0 auto; padding:32px 32px 140px;
+    font-size:12px; color:var(--chrome-dim); border-top:1px solid var(--hairline);
+  }
+
+  @media (max-width: 640px){
+    .track{grid-template-columns:1fr; gap:16px;}
+    .cover{width:120px; height:120px;}
+    .track-num{padding-top:0;}
+  }
+
+  .sr-only{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0);}
+</style>
+</head>
+<body>
+
+<h2 class="sr-only">APOTHEOSIS: Mausoleum of Chrome — a nine-track concept album by Casenumber, presented as a scrolling chapter-by-chapter page with a full-width playback progress bar and an increasingly glitched visual treatment that resolves by the final track.</h2>
+
+<div id="rail"><div id="rail-fill"><div id="rail-glow"></div></div></div>
+<div id="spine"></div>
+<div id="spine-marker"></div>
+
+<header>
+  <img class="lp-art" src="assets/cover.jpg" alt="APOTHEOSIS: Mausoleum of Chrome LP cover — a robed figure haloed by circuitry stands before a cathedral of neon skyscrapers, surrounded by fallen masked faces.">
+  <div>
+    <p class="eyebrow">Casenumber &middot; concept album &middot; 9 tracks</p>
+    <h1>APOTHEOSIS
+      <span style="color:var(--chrome-dim); font-weight:400;">Mausoleum of Chrome</span>
+      <span class="kanji">電脳鎮魂歌</span>
+    </h1>
+    <p class="liner">
+      <span class="jp">これは、記憶の墓標。</span><br>
+      <span class="jp">コードの海に沈んだ魂たちの、鎮魂歌。</span><br>
+      This is a gravestone of memory — a requiem for souls sunk in a sea of code.
+    </p>
+    <div class="catalog">
+      <span>NR-001</span><span>Stereo</span><span>33⅓ RPM</span><span>Neon Requiem Series</span><span>Limited Edition 2024</span>
+    </div>
+    <div class="meta-row">
+      <span>Genesis</span><span class="dot"></span>
+      <span>Corruption</span><span class="dot"></span>
+      <span>Reformat</span>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div id="album"></div>
+</main>
+
+<footer>
+  Cover art is real for all 9 tracks (v2 unified set). Earlier per-track art (assets/covers/1_*.jpg through 8_*.jpg) is kept but unreferenced in case you want it back. "Kernel Dive" alt art for Recursive Descent lives at assets/covers/unassigned/; a nude alternate for the same track is held at assets/covers/alt/ — neither wired in. Audio is still simulated — add TRACKS[].audioSrc and wire it to an &lt;audio&gt; element per the inline comments to make playback real.
+</footer>
+
+<div id="player">
+  <div class="np-art" id="np-art"></div>
+  <div class="np-text">
+    <div class="np-title" id="np-title">Genesis Neon</div>
+    <div class="np-num" id="np-num">Track 01</div>
+  </div>
+  <div class="transport">
+    <button id="prev-btn" aria-label="Previous track">
+      <svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
+    </button>
+    <button id="play-pause" aria-label="Play">
+      <svg id="play-icon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+    </button>
+    <button id="next-btn" aria-label="Next track">
+      <svg viewBox="0 0 24 24"><path d="M16 6h2v12h-2zM6 6l8.5 6L6 18z"/></svg>
+    </button>
+  </div>
+  <div class="time-row">
+    <span id="cur-time">0:00</span>
+    <div id="mini-rail"><div id="mini-rail-fill"></div></div>
+    <span id="dur-time">0:00</span>
+  </div>
+</div>
+
+<script>
+/*
+  TRACKS: replace audioSrc with real file URLs (mp3/wav exported from Suno,
+  hosted alongside this page or on a CDN) and coverSrc with the real track
+  art. corruption is a 0..1 authorial value driving the glitch intensity for
+  that chapter of the narrative (0 = clean signal, 1 = peak system failure).
+  act refers to ACTS[] below (1-indexed, matching the five-act story arc).
+*/
+const ACTS = [
+  { name:"Awakening", desc:"Birth of consciousness." },
+  { name:"Crisis", desc:"Discovery of corruption and the journey inward." },
+  { name:"Confrontation", desc:"Hikari realizes the enemy is inseparable from herself." },
+  { name:"Transformation", desc:"Acceptance, grief, and transcendence through union." },
+  { name:"Ascension", desc:"The old digital world dies so a higher form of existence can be born." },
+];
+const ROMAN = ["I","II","III","IV","V"];
+
+const TRACKS = [
+  { title:"Genesis Neon", jp:"ネオン・ジェネシス", act:1, dur:"5:17",
+    shot:"Extreme wide establishing shot",
+    style:"Cinematic Synthwave · Progressive Rock",
+    story:"The city awakens. Hikari experiences consciousness for the first time, overlooking a breathtaking neon metropolis at sunrise from a rooftop as rain reflects thousands of lights. The virus already exists — but is invisible.",
+    mood:"Hope", colors:["Blue","Cyan","Sunrise gold"],
+    hiddenSymbol:"The rising sun framed by the skyline, with one distant glitch in the city.",
+    tags:["rap","emotional strings","high-energy rock","soaring vocals","intense guitar riffs","driving drum beats","Gothic Synth Opera","Female vocals"],
+    corruption:0.05, hue:195, sat:75, light:58, pos:"20% 12%", coverSrc:"assets/covers/v2_01_genesis_neon.jpg" },
+
+  { title:"The Spark in the Wires", jp:"ワイヤーの火花", act:1, dur:"4:55",
+    shot:"Medium environmental shot",
+    style:"Electronic Rock · Synthwave",
+    story:"Hikari begins understanding herself, discovering beauty inside the network — an enormous floating forest of glowing cables, holographic flowers, optical fibers, and luminous data streams. The city is still intact.",
+    mood:"Wonder", colors:["Turquoise","Lavender"],
+    hiddenSymbol:"A glowing strand of code lights the entire network with a single touch.",
+    tags:["rap","emotional strings","gentle","soaring vocals","synth keyboards","ambient","glitches","Female vocal"],
+    corruption:0.15, hue:215, sat:55, light:62, pos:"78% 18%", coverSrc:"assets/covers/v2_02_the_spark.jpg" },
+
+  { title:"Shadows of the Grid", jp:"グリッドの影", act:2, dur:"4:03",
+    shot:"Reflection shot",
+    style:null,
+    story:"The network begins behaving strangely. Something watches. In dark subway tunnels and infinite server corridors, Hikari stands alone while countless holographic eyes appear in reflections that don't perfectly match reality.",
+    mood:"Isolation, paranoia", colors:["Purple","Blue-black"],
+    hiddenSymbol:"One reflection looks back at her independently.",
+    tags:["dub techno","ambient","glitch effects","cinematic strings","deep basslines","minimal percussion","atmospheric pads","ethereal soundscape","sparse rhythms","delayed synth stabs"],
+    corruption:0.35, hue:255, sat:50, light:35, pos:"30% 40%", coverSrc:"assets/covers/v2_03_shadows.jpg" },
+
+  { title:"Firewall Collapse (dub rock)", jp:"ファイアウォール崩壊", act:2, dur:"7:22",
+    shot:"Dynamic wide shot (Dutch angle)",
+    style:"Industrial Rock · Dub Techno",
+    story:"The first attack. The city begins dying — gigantic firewalls shatter like stained glass, buildings split open with streams of corrupted code, and explosions made from pixels instead of fire tear the skyline apart.",
+    mood:"Violence, shock", colors:["Crimson","Orange","Black"],
+    hiddenSymbol:"A colossal circular firewall cracks like stained glass.",
+    tags:["dub techno","high-energy rock","cinematic strings","glitch effects","distorted guitars","atmospheric pads","deep basslines","dynamic drums","metallic percussion","ethereal vocals"],
+    corruption:0.6, hue:18, sat:80, light:50, pos:"70% 45%", coverSrc:"assets/covers/v2_04_firewall_collapse.jpg" },
+
+  { title:"Fragments of Code", jp:"コードの断片", act:2, dur:"4:13",
+    shot:"Intimate close-up",
+    style:"Cinematic Ballad · Ambient",
+    story:"After the disaster, the survivors wander through memories. In a flooded city, holographic photographs and memory fragments hang suspended like snow as Hikari kneels beside a broken android.",
+    mood:"Grief, silence", colors:["Grey","Pale blue"],
+    hiddenSymbol:"A memory shard reflecting the person she used to be.",
+    tags:["rap","ballad","cinematic strings","ambient electronic","ethereal vocals","melodic rap","glitch effects","piano","atmospheric pads","deep basslines"],
+    corruption:0.42, hue:210, sat:12, light:55, pos:"50% 55%", coverSrc:"assets/covers/v2_05_fragments.jpg" },
+
+  { title:"Virus Eternal (Stephenson lyrics)", jp:"永遠のウィルス", act:3, dur:"3:48",
+    shot:"Worm's-eye (low-angle) shot",
+    style:"Industrial · Cinematic Metal · Glitch",
+    story:"The antagonist fully emerges — not a monster, but a digital god. An impossibly enormous entity made from circuitry, cathedral windows, neural networks, and corrupted code towers over the city as Hikari faces it.",
+    mood:"Awe, terror", colors:["Green","Magenta","Black"],
+    hiddenSymbol:"A corrupted mechanical halo surrounds the Virus.",
+    tags:["Darkwave Techno-Rap","industrial beats","glitch effects","cinematic strings","ambient pads","duet","pulsating basslines","distorted synths","melodic rap","metallic percussion","Female vocals"],
+    corruption:0.85, hue:300, sat:75, light:45, pos:"25% 70%", coverSrc:"assets/covers/v2_06_virus_eternal.jpg" },
+
+  { title:"Recursive Descent", jp:"再帰的下降", act:4, dur:"3:07",
+    shot:"Impossible perspective",
+    style:"Glitch Hop · Cinematic Electronica",
+    story:"Reality collapses. The city loops endlessly through Escher-like architecture, infinite staircases, and buildings folding into themselves as gravity stops working. Fragments of previous album covers appear inside the scene.",
+    mood:"Confusion, madness", colors:["White","Electric blue"],
+    hiddenSymbol:"An infinite Möbius staircase disappears into darkness.",
+    tags:["glitchy electronica","cinematic soundscapes","melodic rap","ethereal vocals","fragmented beats","haunting melodies","ambient pads","dissonant textures","dynamic shifts","introspective rhythms"],
+    corruption:1.0, hue:200, sat:60, light:75, pos:"75% 78%", coverSrc:"assets/covers/v2_07_recursive_descent.jpg" },
+
+  { title:"Unity Protocol", jp:"ユニティ・プロトコル", act:4, dur:"3:18",
+    shot:"Circular composition",
+    style:"Progressive Electronic · Orchestral Rock",
+    story:"The climax. Hikari merges with the Virus — not through defeat, but through understanding. Two luminous figures reach toward each other as the city dissolves into light and neural pathways become galaxies.",
+    mood:"Acceptance, transcendence", colors:["Violet","Silver"],
+    hiddenSymbol:"Two halos merge into a single radiant ring.",
+    tags:["Darkwave Techno-Rap","industrial beats","glitch effects","cinematic strings","ambient pads","duet","pulsating basslines","distorted synths","melodic rap","metallic percussion","Female vocals","duet"],
+    corruption:0.3, hue:265, sat:40, light:65, pos:"40% 90%", coverSrc:"assets/covers/v2_08_unity_protocol.jpg" },
+
+  { title:"System Reformat", jp:"システム・リフォーマット", act:5, dur:"2:54",
+    shot:"Perfectly symmetrical monumental shot",
+    style:"Epic Synth Opera · Progressive Rock",
+    story:"The old civilization ends, a new one begins. The legendary Chrome Mausoleum rises — a vast cathedral of chrome, fiber optics, quantum processors, and crystal, with countless dormant androids lying peacefully beneath it. Hikari now appears almost divine as the first sunrise of the new world rises behind the mausoleum.",
+    mood:"Peace, rebirth, hope", colors:["White","Gold","Chrome"],
+    hiddenSymbol:"A white flower grows through polished chrome beneath a complete halo.",
+    tags:["aggressive techno","darkwave","industrial","glitch","synth keyboards","Female vocal","duet"],
+    corruption:0.0, hue:45, sat:55, light:70, pos:"60% 8%", coverSrc:"assets/covers/v2_09_system_reformat.jpg" },
+];
+
+function parseDur(str){
+  const [m,s] = str.split(':').map(Number);
+  const sec = m*60 + s;
+  return isNaN(sec) ? 240 : sec; // 240s fallback for placeholder durations like "--:--"
+}
+function fmt(sec){
+  sec = Math.max(0, Math.round(sec));
+  const m = Math.floor(sec/60), s = sec%60;
+  return m + ':' + String(s).padStart(2,'0');
+}
+const COLOR_MAP = {
+  "sunrise gold":"#e8c766", "pale blue":"#a9c6e8", "blue-black":"#1a1a30",
+  "electric blue":"#4d9fff",
+};
+function cssColor(name){
+  return COLOR_MAP[name.toLowerCase()] || name.toLowerCase();
+}
+
+function applyTileArt(el, t){
+  if(t.coverSrc){
+    el.style.backgroundImage = `url('${t.coverSrc}')`;
+    el.style.backgroundSize = 'cover';
+    el.style.backgroundPosition = 'center';
+  } else {
+    el.style.backgroundImage = `linear-gradient(hsla(${t.hue}, ${t.sat||60}%, 12%, 0.72), hsla(${t.hue}, ${t.sat||60}%, 8%, 0.82)), url('assets/cover.jpg')`;
+    el.style.backgroundSize = 'cover, 340% auto';
+    el.style.backgroundPosition = `center, ${t.pos}`;
+  }
+}
+
+const album = document.getElementById('album');
+let lastAct = null;
+TRACKS.forEach((t, i) => {
+  if(t.act !== lastAct){
+    const info = ACTS[t.act - 1];
+    const divider = document.createElement('div');
+    divider.className = 'act-divider';
+    divider.innerHTML = `
+      <div class="act-row">Act ${ROMAN[t.act-1]}<span class="act-name">&nbsp;— ${info.name}</span></div>
+      <div class="act-desc">${info.desc}</div>
+    `;
+    album.appendChild(divider);
+    lastAct = t.act;
+  }
+
+  const el = document.createElement('div');
+  el.className = 'track';
+  el.dataset.index = i;
+  el.innerHTML = `
+    <div class="track-num">${String(i+1).padStart(2,'0')}</div>
+    <div class="cover" data-index="${i}">
+      <div class="play-btn">
+        <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+      </div>
+    </div>
+    <div class="track-body">
+      <div class="title-row">
+        <h3 class="track-title">${t.title}</h3>
+        <span class="pill">v5.5</span>
+      </div>
+      ${t.jp ? `<div class="track-title-jp">${t.jp}</div>` : ''}
+      <div class="duration">${t.dur}</div>
+      ${t.style ? `<div class="style-line">${t.style}</div>` : ''}
+      ${t.shot ? `<div class="shot-line">${t.shot}</div>` : ''}
+      ${t.story ? `<div class="story">${t.story}</div>` : ''}
+      ${t.mood ? `<div class="mood-row">${t.mood}${t.colors ? ' · ' + t.colors.map(c => `<span class="swatch" style="background:${cssColor(c)}"></span>`).join('') : ''}</div>` : ''}
+      ${t.hiddenSymbol ? `<div class="hidden-symbol">${t.hiddenSymbol}</div>` : ''}
+      <div class="tags">${t.tags.map(tag => `<span>${tag}</span>`).join('')}</div>
+    </div>
+  `;
+  album.appendChild(el);
+  applyTileArt(el.querySelector('.cover'), t);
+});
+
+/* ---------- playback simulation ----------
+   No audio files are attached yet, so playback is a timer that advances
+   currentTime toward each track's duration. To wire real audio:
+   1. give each TRACKS[i] an audioSrc
+   2. replace startTick()/pause() bodies with a shared <audio> element,
+      set audio.src = TRACKS[i].audioSrc, call audio.play()/pause()
+   3. drive updateProgress() off the audio's 'timeupdate' event instead
+      of the setInterval below, and read audio.duration when available
+*/
+let current = 0;
+let playing = false;
+let currentTime = 0;
+let tickHandle = null;
+
+const railFill = document.getElementById('rail-fill');
+const miniFill = document.getElementById('mini-rail-fill');
+const curTimeEl = document.getElementById('cur-time');
+const durTimeEl = document.getElementById('dur-time');
+const npTitle = document.getElementById('np-title');
+const npNum = document.getElementById('np-num');
+const npArt = document.getElementById('np-art');
+const playIcon = document.getElementById('play-icon');
+const playPauseBtn = document.getElementById('play-pause');
+const trackEls = Array.from(document.querySelectorAll('.track'));
+const coverEls = Array.from(document.querySelectorAll('.cover'));
+
+function setCorruptionVars(t){
+  document.documentElement.style.setProperty('--corruption', t.corruption);
+  const accent = `hsl(${t.hue} ${t.sat||80}% ${Math.max(t.light||60, 45)}%)`;
+  document.documentElement.style.setProperty('--accent', accent);
+}
+
+function loadTrack(i){
+  current = i;
+  const t = TRACKS[i];
+  currentTime = 0;
+  durTimeEl.textContent = t.dur;
+  curTimeEl.textContent = '0:00';
+  npTitle.textContent = t.title;
+  npNum.textContent = 'Track ' + String(i+1).padStart(2,'0');
+  applyTileArt(npArt, t);
+  setCorruptionVars(t);
+  trackEls.forEach((el,idx) => el.classList.toggle('is-active', idx === i));
+  coverEls.forEach((el,idx) => el.classList.toggle('is-playing', idx === i && playing));
+  updateProgress();
+}
+
+function updateProgress(){
+  const dur = parseDur(TRACKS[current].dur);
+  const pct = Math.min(100, (currentTime/dur)*100);
+  railFill.style.width = pct + '%';
+  miniFill.style.width = pct + '%';
+  curTimeEl.textContent = fmt(currentTime);
+}
+
+function play(){
+  playing = true;
+  playIcon.outerHTML = '<svg id="play-icon" viewBox="0 0 24 24"><path d="M6 5h4v14H6zm8 0h4v14h-4z"/></svg>';
+  coverEls.forEach((el,idx) => el.classList.toggle('is-playing', idx === current));
+  clearInterval(tickHandle);
+  tickHandle = setInterval(() => {
+    const dur = parseDur(TRACKS[current].dur);
+    currentTime += 1;
+    if(currentTime >= dur){
+      nextTrack();
+      return;
+    }
+    updateProgress();
+  }, 1000);
+}
+
+function pause(){
+  playing = false;
+  document.getElementById('play-icon').outerHTML = '<svg id="play-icon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
+  coverEls.forEach(el => el.classList.remove('is-playing'));
+  clearInterval(tickHandle);
+}
+
+function togglePlay(){ playing ? pause() : play(); }
+
+function nextTrack(){
+  const i = (current + 1) % TRACKS.length;
+  loadTrack(i);
+  if(playing) play(); else updateProgress();
+  document.getElementById('track-' + i)?.scrollIntoView({behavior:'smooth', block:'center'});
+}
+function prevTrack(){
+  const i = (current - 1 + TRACKS.length) % TRACKS.length;
+  loadTrack(i);
+  if(playing) play(); else updateProgress();
+}
+
+playPauseBtn.addEventListener('click', togglePlay);
+document.getElementById('next-btn').addEventListener('click', nextTrack);
+document.getElementById('prev-btn').addEventListener('click', prevTrack);
+
+coverEls.forEach(el => {
+  el.addEventListener('click', () => {
+    const idx = Number(el.dataset.index);
+    if(idx === current){
+      togglePlay();
+    } else {
+      loadTrack(idx);
+      play();
+    }
+  });
+});
+
+function seekFromEvent(e, railEl){
+  const rect = railEl.getBoundingClientRect();
+  const pct = Math.min(1, Math.max(0, (e.clientX - rect.left) / rect.width));
+  const dur = parseDur(TRACKS[current].dur);
+  currentTime = pct * dur;
+  updateProgress();
+}
+document.getElementById('rail').addEventListener('click', e => seekFromEvent(e, document.getElementById('rail')));
+document.getElementById('mini-rail').addEventListener('click', e => seekFromEvent(e, document.getElementById('mini-rail')));
+
+/* scroll-linked "now viewing" state — separate from playback.
+   Scrolling changes which track is highlighted/active visually and primed
+   as "up next" but does not auto-start playback, matching how the mini
+   player above stays anchored to whatever is actually playing. */
+trackEls.forEach((el,i) => el.id = 'track-' + i);
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if(entry.isIntersecting && entry.intersectionRatio > 0.5 && !playing){
+      const idx = Number(entry.target.dataset.index);
+      setCorruptionVars(TRACKS[idx]);
+    }
+  });
+}, { threshold: [0.5] });
+trackEls.forEach(el => observer.observe(el));
+
+/* ---------- vertical spine ----------
+   Static gradient: each track's hue placed at the vertical percentage
+   where that track's section actually falls in the document, so the
+   spine is a fixed color map of the whole page's mood arc. A marker
+   dot travels down it in sync with real scroll position, and small
+   ticks mark each track's start (click to jump there). */
+function buildSpine(){
+  const totalHeight = document.body.scrollHeight;
+  const stops = TRACKS.map((t,i) => {
+    const el = document.getElementById('track-' + i);
+    const pct = (el.offsetTop / totalHeight * 100).toFixed(2);
+    return { pct, hue: t.hue, sat: t.sat||70, light: Math.max(t.light||55, 40) };
+  });
+  const gradientStops = stops.map(s => `hsl(${s.hue} ${s.sat}% ${s.light}%) ${s.pct}%`).join(', ');
+  document.documentElement.style.setProperty('--spine-gradient', `linear-gradient(180deg, ${gradientStops})`);
+
+  const spine = document.getElementById('spine');
+  document.querySelectorAll('.spine-tick').forEach(t => t.remove());
+  stops.forEach((s, i) => {
+    const tick = document.createElement('div');
+    tick.className = 'spine-tick';
+    tick.style.top = (parseFloat(s.pct) / 100 * window.innerHeight) + 'px';
+    tick.title = TRACKS[i].title;
+    tick.addEventListener('click', () => document.getElementById('track-' + i).scrollIntoView({behavior:'smooth', block:'start'}));
+    document.body.appendChild(tick);
+  });
+}
+
+function updateSpineMarker(){
+  const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+  const frac = scrollable > 0 ? window.scrollY / scrollable : 0;
+  const y = frac * (window.innerHeight - 9);
+  document.getElementById('spine-marker').style.transform = `translateY(${y}px)`;
+}
+window.addEventListener('scroll', updateSpineMarker);
+window.addEventListener('resize', () => { buildSpine(); updateSpineMarker(); });
+
+loadTrack(0);
+requestAnimationFrame(() => { buildSpine(); updateSpineMarker(); });
+</script>
+
+</body>
+</html>
