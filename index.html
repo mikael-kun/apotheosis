@@ -309,7 +309,7 @@
 <div id="spine-marker"></div>
 
 <header>
-  <img class="lp-art" src="assets/cover.jpg" alt="APOTHEOSIS: Mausoleum of Chrome LP cover — a robed figure haloed by circuitry stands before a cathedral of neon skyscrapers, surrounded by fallen masked faces.">
+  <img class="lp-art" src="illustrations/apotheosis_LP_cover.jpg" alt="APOTHEOSIS: Mausoleum of Chrome LP cover — a robed figure haloed by circuitry stands before a cathedral of neon skyscrapers, surrounded by fallen masked faces.">
   <div>
     <p class="eyebrow">Casenumber &middot; concept album &middot; 9 tracks</p>
     <h1>APOTHEOSIS
@@ -337,7 +337,7 @@
 </main>
 
 <footer>
-  Cover art is real for all 9 tracks (v2 unified set). Earlier per-track art (assets/covers/1_*.jpg through 8_*.jpg) is kept but unreferenced in case you want it back. "Kernel Dive" alt art for Recursive Descent lives at assets/covers/unassigned/; a nude alternate for the same track is held at assets/covers/alt/ — neither wired in. Audio is still simulated — add TRACKS[].audioSrc and wire it to an &lt;audio&gt; element per the inline comments to make playback real.
+  Cover art and audio are loaded from the illustrations/ and tracks/ folders respectively.
 </footer>
 
 <div id="player">
@@ -363,6 +363,7 @@
     <span id="dur-time">0:00</span>
   </div>
 </div>
+<audio id="audio-el" preload="metadata"></audio>
 
 <script>
 /*
@@ -389,7 +390,7 @@ const TRACKS = [
     mood:"Hope", colors:["Blue","Cyan","Sunrise gold"],
     hiddenSymbol:"The rising sun framed by the skyline, with one distant glitch in the city.",
     tags:["rap","emotional strings","high-energy rock","soaring vocals","intense guitar riffs","driving drum beats","Gothic Synth Opera","Female vocals"],
-    corruption:0.05, hue:195, sat:75, light:58, pos:"20% 12%", coverSrc:"assets/covers/v2_01_genesis_neon.jpg" },
+    corruption:0.05, hue:195, sat:75, light:58, pos:"20% 12%", coverSrc:"illustrations/track1-genesis.png", audioSrc:"tracks/Track 1_ Genesis Neon.mp3" },
 
   { title:"The Spark in the Wires", jp:"ワイヤーの火花", act:1, dur:"4:55",
     shot:"Medium environmental shot",
@@ -398,7 +399,7 @@ const TRACKS = [
     mood:"Wonder", colors:["Turquoise","Lavender"],
     hiddenSymbol:"A glowing strand of code lights the entire network with a single touch.",
     tags:["rap","emotional strings","gentle","soaring vocals","synth keyboards","ambient","glitches","Female vocal"],
-    corruption:0.15, hue:215, sat:55, light:62, pos:"78% 18%", coverSrc:"assets/covers/v2_02_the_spark.jpg" },
+    corruption:0.15, hue:215, sat:55, light:62, pos:"78% 18%", coverSrc:"illustrations/track2-the-spark.png", audioSrc:"tracks/Track 2_ The Spark in the Wires 1.2 (Remastered).mp3" },
 
   { title:"Shadows of the Grid", jp:"グリッドの影", act:2, dur:"4:03",
     shot:"Reflection shot",
@@ -407,7 +408,7 @@ const TRACKS = [
     mood:"Isolation, paranoia", colors:["Purple","Blue-black"],
     hiddenSymbol:"One reflection looks back at her independently.",
     tags:["dub techno","ambient","glitch effects","cinematic strings","deep basslines","minimal percussion","atmospheric pads","ethereal soundscape","sparse rhythms","delayed synth stabs"],
-    corruption:0.35, hue:255, sat:50, light:35, pos:"30% 40%", coverSrc:"assets/covers/v2_03_shadows.jpg" },
+    corruption:0.35, hue:255, sat:50, light:35, pos:"30% 40%", coverSrc:"illustrations/track3-shadows.png", audioSrc:"tracks/Track 3_ Shadows of the Grid.mp3" },
 
   { title:"Firewall Collapse (dub rock)", jp:"ファイアウォール崩壊", act:2, dur:"7:22",
     shot:"Dynamic wide shot (Dutch angle)",
@@ -416,7 +417,7 @@ const TRACKS = [
     mood:"Violence, shock", colors:["Crimson","Orange","Black"],
     hiddenSymbol:"A colossal circular firewall cracks like stained glass.",
     tags:["dub techno","high-energy rock","cinematic strings","glitch effects","distorted guitars","atmospheric pads","deep basslines","dynamic drums","metallic percussion","ethereal vocals"],
-    corruption:0.6, hue:18, sat:80, light:50, pos:"70% 45%", coverSrc:"assets/covers/v2_04_firewall_collapse.jpg" },
+    corruption:0.6, hue:18, sat:80, light:50, pos:"70% 45%", coverSrc:"illustrations/track4-firewall.png", audioSrc:"tracks/Track 4_ Firewall Collapse (dub rock).mp3" },
 
   { title:"Fragments of Code", jp:"コードの断片", act:2, dur:"4:13",
     shot:"Intimate close-up",
@@ -425,7 +426,7 @@ const TRACKS = [
     mood:"Grief, silence", colors:["Grey","Pale blue"],
     hiddenSymbol:"A memory shard reflecting the person she used to be.",
     tags:["rap","ballad","cinematic strings","ambient electronic","ethereal vocals","melodic rap","glitch effects","piano","atmospheric pads","deep basslines"],
-    corruption:0.42, hue:210, sat:12, light:55, pos:"50% 55%", coverSrc:"assets/covers/v2_05_fragments.jpg" },
+    corruption:0.42, hue:210, sat:12, light:55, pos:"50% 55%", coverSrc:"illustrations/track5-fragments.png", audioSrc:"tracks/Track 5_ Fragments of Code.mp3" },
 
   { title:"Virus Eternal (Stephenson lyrics)", jp:"永遠のウィルス", act:3, dur:"3:48",
     shot:"Worm's-eye (low-angle) shot",
@@ -434,7 +435,7 @@ const TRACKS = [
     mood:"Awe, terror", colors:["Green","Magenta","Black"],
     hiddenSymbol:"A corrupted mechanical halo surrounds the Virus.",
     tags:["Darkwave Techno-Rap","industrial beats","glitch effects","cinematic strings","ambient pads","duet","pulsating basslines","distorted synths","melodic rap","metallic percussion","Female vocals"],
-    corruption:0.85, hue:300, sat:75, light:45, pos:"25% 70%", coverSrc:"assets/covers/v2_06_virus_eternal.jpg" },
+    corruption:0.85, hue:300, sat:75, light:45, pos:"25% 70%", coverSrc:"illustrations/track6-virus.png", audioSrc:"tracks/Track 6_ Virus Eternal.mp3" },
 
   { title:"Recursive Descent", jp:"再帰的下降", act:4, dur:"3:07",
     shot:"Impossible perspective",
@@ -443,7 +444,7 @@ const TRACKS = [
     mood:"Confusion, madness", colors:["White","Electric blue"],
     hiddenSymbol:"An infinite Möbius staircase disappears into darkness.",
     tags:["glitchy electronica","cinematic soundscapes","melodic rap","ethereal vocals","fragmented beats","haunting melodies","ambient pads","dissonant textures","dynamic shifts","introspective rhythms"],
-    corruption:1.0, hue:200, sat:60, light:75, pos:"75% 78%", coverSrc:"assets/covers/v2_07_recursive_descent.jpg" },
+    corruption:1.0, hue:200, sat:60, light:75, pos:"75% 78%", coverSrc:"illustrations/track7-recursive.png", audioSrc:"tracks/Track 7_ Recursive Descent 2.mp3" },
 
   { title:"Unity Protocol", jp:"ユニティ・プロトコル", act:4, dur:"3:18",
     shot:"Circular composition",
@@ -452,7 +453,7 @@ const TRACKS = [
     mood:"Acceptance, transcendence", colors:["Violet","Silver"],
     hiddenSymbol:"Two halos merge into a single radiant ring.",
     tags:["Darkwave Techno-Rap","industrial beats","glitch effects","cinematic strings","ambient pads","duet","pulsating basslines","distorted synths","melodic rap","metallic percussion","Female vocals","duet"],
-    corruption:0.3, hue:265, sat:40, light:65, pos:"40% 90%", coverSrc:"assets/covers/v2_08_unity_protocol.jpg" },
+    corruption:0.3, hue:265, sat:40, light:65, pos:"40% 90%", coverSrc:"illustrations/track8-unity.png", audioSrc:"tracks/Track 8_ Unity Protocol.mp3" },
 
   { title:"System Reformat", jp:"システム・リフォーマット", act:5, dur:"2:54",
     shot:"Perfectly symmetrical monumental shot",
@@ -461,7 +462,7 @@ const TRACKS = [
     mood:"Peace, rebirth, hope", colors:["White","Gold","Chrome"],
     hiddenSymbol:"A white flower grows through polished chrome beneath a complete halo.",
     tags:["aggressive techno","darkwave","industrial","glitch","synth keyboards","Female vocal","duet"],
-    corruption:0.0, hue:45, sat:55, light:70, pos:"60% 8%", coverSrc:"assets/covers/v2_09_system_reformat.jpg" },
+    corruption:0.0, hue:45, sat:55, light:70, pos:"60% 8%", coverSrc:"illustrations/track9-system.png", audioSrc:"tracks/Track 9_ System Reformat.mp3" },
 ];
 
 function parseDur(str){
@@ -488,7 +489,7 @@ function applyTileArt(el, t){
     el.style.backgroundSize = 'cover';
     el.style.backgroundPosition = 'center';
   } else {
-    el.style.backgroundImage = `linear-gradient(hsla(${t.hue}, ${t.sat||60}%, 12%, 0.72), hsla(${t.hue}, ${t.sat||60}%, 8%, 0.82)), url('assets/cover.jpg')`;
+    el.style.backgroundImage = `linear-gradient(hsla(${t.hue}, ${t.sat||60}%, 12%, 0.72), hsla(${t.hue}, ${t.sat||60}%, 8%, 0.82)), url('illustrations/apotheosis_LP_cover.jpg')`;
     el.style.backgroundSize = 'cover, 340% auto';
     el.style.backgroundPosition = `center, ${t.pos}`;
   }
@@ -538,20 +539,11 @@ TRACKS.forEach((t, i) => {
   applyTileArt(el.querySelector('.cover'), t);
 });
 
-/* ---------- playback simulation ----------
-   No audio files are attached yet, so playback is a timer that advances
-   currentTime toward each track's duration. To wire real audio:
-   1. give each TRACKS[i] an audioSrc
-   2. replace startTick()/pause() bodies with a shared <audio> element,
-      set audio.src = TRACKS[i].audioSrc, call audio.play()/pause()
-   3. drive updateProgress() off the audio's 'timeupdate' event instead
-      of the setInterval below, and read audio.duration when available
-*/
+/* ---------- playback ---------- */
 let current = 0;
 let playing = false;
-let currentTime = 0;
-let tickHandle = null;
 
+const audioEl = document.getElementById('audio-el');
 const railFill = document.getElementById('rail-fill');
 const miniFill = document.getElementById('mini-rail-fill');
 const curTimeEl = document.getElementById('cur-time');
@@ -570,10 +562,11 @@ function setCorruptionVars(t){
   document.documentElement.style.setProperty('--accent', accent);
 }
 
-function loadTrack(i){
+function loadTrack(i, autoplay){
   current = i;
   const t = TRACKS[i];
-  currentTime = 0;
+  audioEl.src = t.audioSrc;
+  if(autoplay) audioEl.play(); else audioEl.pause();
   durTimeEl.textContent = t.dur;
   curTimeEl.textContent = '0:00';
   npTitle.textContent = t.title;
@@ -586,49 +579,44 @@ function loadTrack(i){
 }
 
 function updateProgress(){
-  const dur = parseDur(TRACKS[current].dur);
-  const pct = Math.min(100, (currentTime/dur)*100);
+  const dur = audioEl.duration || parseDur(TRACKS[current].dur);
+  const pct = Math.min(100, (audioEl.currentTime/dur)*100) || 0;
   railFill.style.width = pct + '%';
   miniFill.style.width = pct + '%';
-  curTimeEl.textContent = fmt(currentTime);
+  curTimeEl.textContent = fmt(audioEl.currentTime);
 }
 
 function play(){
   playing = true;
+  audioEl.play();
   playIcon.outerHTML = '<svg id="play-icon" viewBox="0 0 24 24"><path d="M6 5h4v14H6zm8 0h4v14h-4z"/></svg>';
   coverEls.forEach((el,idx) => el.classList.toggle('is-playing', idx === current));
-  clearInterval(tickHandle);
-  tickHandle = setInterval(() => {
-    const dur = parseDur(TRACKS[current].dur);
-    currentTime += 1;
-    if(currentTime >= dur){
-      nextTrack();
-      return;
-    }
-    updateProgress();
-  }, 1000);
 }
 
 function pause(){
   playing = false;
+  audioEl.pause();
   document.getElementById('play-icon').outerHTML = '<svg id="play-icon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
   coverEls.forEach(el => el.classList.remove('is-playing'));
-  clearInterval(tickHandle);
 }
 
 function togglePlay(){ playing ? pause() : play(); }
 
 function nextTrack(){
   const i = (current + 1) % TRACKS.length;
-  loadTrack(i);
-  if(playing) play(); else updateProgress();
+  loadTrack(i, playing);
   document.getElementById('track-' + i)?.scrollIntoView({behavior:'smooth', block:'center'});
 }
 function prevTrack(){
   const i = (current - 1 + TRACKS.length) % TRACKS.length;
-  loadTrack(i);
-  if(playing) play(); else updateProgress();
+  loadTrack(i, playing);
 }
+
+audioEl.addEventListener('timeupdate', updateProgress);
+audioEl.addEventListener('loadedmetadata', () => {
+  durTimeEl.textContent = fmt(audioEl.duration);
+});
+audioEl.addEventListener('ended', nextTrack);
 
 playPauseBtn.addEventListener('click', togglePlay);
 document.getElementById('next-btn').addEventListener('click', nextTrack);
@@ -640,7 +628,7 @@ coverEls.forEach(el => {
     if(idx === current){
       togglePlay();
     } else {
-      loadTrack(idx);
+      loadTrack(idx, true);
       play();
     }
   });
@@ -649,8 +637,8 @@ coverEls.forEach(el => {
 function seekFromEvent(e, railEl){
   const rect = railEl.getBoundingClientRect();
   const pct = Math.min(1, Math.max(0, (e.clientX - rect.left) / rect.width));
-  const dur = parseDur(TRACKS[current].dur);
-  currentTime = pct * dur;
+  const dur = audioEl.duration || parseDur(TRACKS[current].dur);
+  audioEl.currentTime = pct * dur;
   updateProgress();
 }
 document.getElementById('rail').addEventListener('click', e => seekFromEvent(e, document.getElementById('rail')));
