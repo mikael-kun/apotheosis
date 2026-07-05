@@ -17,14 +17,27 @@
 <div id="spine"></div>
 <div id="spine-marker"></div>
 
-<header>
-  <img class="lp-art" src="illustrations/apotheosis_LP_cover.jpg" alt="APOTHEOSIS: Mausoleum of Chrome LP cover — a robed figure haloed by circuitry stands before a cathedral of neon skyscrapers, surrounded by fallen masked faces.">
-  <div>
+<section id="hero">
+  <picture class="hero-media">
+    <source media="(max-width: 700px)" srcset="illustrations/hero-mobile.jpg">
+    <img src="illustrations/hero-wide.jpg"
+         alt="Hikari stands on a rain-slick rooftop overlooking a neon metropolis at sunrise, thousands of lights reflecting below."
+         onerror="this.closest('picture').style.display='none'">
+  </picture>
+  <div class="hero-scrim"></div>
+  <div class="hero-content">
     <p class="eyebrow">Casenumber &middot; concept album &middot; 9 tracks</p>
     <h1>APOTHEOSIS
       <span style="color:var(--chrome-dim); font-weight:400;">Mausoleum of Chrome</span>
       <span class="kanji">電脳鎮魂歌</span>
     </h1>
+    <a class="hero-scroll" href="#liner-notes" aria-label="Scroll to album details">▽</a>
+  </div>
+</section>
+
+<header id="liner-notes">
+  <img class="lp-art" src="illustrations/apotheosis_LP_cover.jpg" alt="APOTHEOSIS: Mausoleum of Chrome LP cover — a robed figure haloed by circuitry stands before a cathedral of neon skyscrapers, surrounded by fallen masked faces.">
+  <div>
     <p class="liner">
       <span class="jp">これは、記憶の墓標。</span><br>
       <span class="jp">コードの海に沈んだ魂たちの、鎮魂歌。</span><br>

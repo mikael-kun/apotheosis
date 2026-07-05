@@ -58,9 +58,13 @@ async function init(){
   TRACKS = data.tracks;
 
 const album = document.getElementById('album');
+const PLAY_SVG = '<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
 let lastAct = null;
+let grid = null;
+
 TRACKS.forEach((t, i) => {
-  if(t.act !== lastAct){
+  const isOpener = t.act !== lastAct; // first track of each act -> wide feature card
+  if(isOpener){
     const info = ACTS[t.act - 1];
     const divider = document.createElement('div');
     divider.className = 'act-divider';
@@ -69,38 +73,62 @@ TRACKS.forEach((t, i) => {
       <div class="act-desc">${info.desc}</div>
     `;
     album.appendChild(divider);
+    grid = document.createElement('div');
+    grid.className = 'act-grid';
+    album.appendChild(grid);
     lastAct = t.act;
   }
 
-  const el = document.createElement('div');
-  el.className = 'track';
+  const num = String(i+1).padStart(2,'0');
+  const detailsHTML = `
+    ${t.style ? `<div class="style-line">${t.style}</div>` : ''}
+    ${t.shot ? `<div class="shot-line">${t.shot}</div>` : ''}
+    ${t.mood ? `<div class="mood-row">${t.mood}${t.colors ? ' · ' + t.colors.map(c => `<span class="swatch" style="background:${cssColor(c)}"></span>`).join('') : ''}</div>` : ''}
+    ${t.hiddenSymbol ? `<div class="hidden-symbol">${t.hiddenSymbol}</div>` : ''}
+    <div class="tags">${t.tags.map(tag => `<span>${tag}</span>`).join('')}</div>`;
+
+  const el = document.createElement('article');
+  el.className = 'card track' + (isOpener ? ' feature' : '');
   el.dataset.index = i;
-  el.innerHTML = `
-    <div class="track-num">${String(i+1).padStart(2,'0')}</div>
-    <div class="cover" data-index="${i}">
-      <div class="play-btn">
-        <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-      </div>
-    </div>
-    <div class="track-body">
-      <div class="title-row">
+
+  if(isOpener){
+    el.innerHTML = `
+      <div class="feature-text">
+        <div class="card-eyebrow">Track ${num} · ${t.dur}</div>
         <h3 class="track-title">${t.title}</h3>
-        <span class="pill">v5.5</span>
+        ${t.jp ? `<div class="track-title-jp">${t.jp}</div>` : ''}
+        <div class="card-divider">⊖</div>
+        <p class="card-story">${t.story}</p>
+        ${detailsHTML}
       </div>
-      ${t.jp ? `<div class="track-title-jp">${t.jp}</div>` : ''}
-      <div class="duration">${t.dur}</div>
-      ${t.style ? `<div class="style-line">${t.style}</div>` : ''}
-      ${t.shot ? `<div class="shot-line">${t.shot}</div>` : ''}
-      ${t.story ? `<div class="story">${t.story}</div>` : ''}
-      ${t.mood ? `<div class="mood-row">${t.mood}${t.colors ? ' · ' + t.colors.map(c => `<span class="swatch" style="background:${cssColor(c)}"></span>`).join('') : ''}</div>` : ''}
-      ${t.hiddenSymbol ? `<div class="hidden-symbol">${t.hiddenSymbol}</div>` : ''}
-      <div class="tags">${t.tags.map(tag => `<span>${tag}</span>`).join('')}</div>
-    </div>
-  `;
-  album.appendChild(el);
-  applyTileArt(el.querySelector('.cover'), t);
+      <div class="feature-art">
+        <button class="card-play" aria-label="Play ${t.title}">${PLAY_SVG}</button>
+      </div>
+    `;
+  } else {
+    el.innerHTML = `
+      <div class="card-art"></div>
+      <div class="card-scrim"></div>
+      <div class="card-top">
+        <button class="card-play" aria-label="Play ${t.title}">${PLAY_SVG}</button>
+        <button class="card-more" aria-label="Show track details">+</button>
+      </div>
+      <div class="card-body">
+        <div class="card-eyebrow">Track ${num} · ${t.dur}</div>
+        <h3 class="track-title">${t.title}</h3>
+        ${t.jp ? `<div class="track-title-jp">${t.jp}</div>` : ''}
+        <div class="card-divider">⊖</div>
+        <p class="card-story">${t.story}</p>
+      </div>
+      <div class="card-details">${detailsHTML}</div>
+    `;
+  }
+
+  grid.appendChild(el);
+  applyTileArt(el.querySelector(isOpener ? '.feature-art' : '.card-art'), t);
   const grad = moodGradient(t);
-  if(grad) el.style.setProperty('--track-bg', grad);
+  if(grad && isOpener) el.querySelector('.feature-text').style.backgroundImage =
+    `linear-gradient(90deg, var(--bg-raised) 55%, color-mix(in srgb, var(--bg-raised) 40%, transparent)), ${grad}`;
 });
 
 /* ---------- playback ---------- */
@@ -118,7 +146,7 @@ const npArt = document.getElementById('np-art');
 const playIcon = document.getElementById('play-icon');
 const playPauseBtn = document.getElementById('play-pause');
 const trackEls = Array.from(document.querySelectorAll('.track'));
-const coverEls = Array.from(document.querySelectorAll('.cover'));
+const cardEls = trackEls; // cards double as the play-state indicators
 
 function setCorruptionVars(t){
   document.documentElement.style.setProperty('--corruption', t.corruption);
@@ -138,7 +166,7 @@ function loadTrack(i, autoplay){
   applyTileArt(npArt, t);
   setCorruptionVars(t);
   trackEls.forEach((el,idx) => el.classList.toggle('is-active', idx === i));
-  coverEls.forEach((el,idx) => el.classList.toggle('is-playing', idx === i && playing));
+  cardEls.forEach((el,idx) => el.classList.toggle('is-playing', idx === i && playing));
   updateProgress();
 }
 
@@ -154,14 +182,14 @@ function play(){
   playing = true;
   audioEl.play();
   playIcon.outerHTML = '<svg id="play-icon" viewBox="0 0 24 24"><path d="M6 5h4v14H6zm8 0h4v14h-4z"/></svg>';
-  coverEls.forEach((el,idx) => el.classList.toggle('is-playing', idx === current));
+  cardEls.forEach((el,idx) => el.classList.toggle('is-playing', idx === current));
 }
 
 function pause(){
   playing = false;
   audioEl.pause();
   document.getElementById('play-icon').outerHTML = '<svg id="play-icon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
-  coverEls.forEach(el => el.classList.remove('is-playing'));
+  cardEls.forEach(el => el.classList.remove('is-playing'));
 }
 
 function togglePlay(){ playing ? pause() : play(); }
@@ -186,15 +214,26 @@ playPauseBtn.addEventListener('click', togglePlay);
 document.getElementById('next-btn').addEventListener('click', nextTrack);
 document.getElementById('prev-btn').addEventListener('click', prevTrack);
 
-coverEls.forEach(el => {
-  el.addEventListener('click', () => {
-    const idx = Number(el.dataset.index);
+document.querySelectorAll('.card-play').forEach(btn => {
+  btn.addEventListener('click', e => {
+    e.stopPropagation();
+    const idx = Number(btn.closest('.track').dataset.index);
     if(idx === current){
       togglePlay();
     } else {
       loadTrack(idx, true);
       play();
     }
+  });
+});
+
+document.querySelectorAll('.card-more').forEach(btn => {
+  btn.addEventListener('click', e => {
+    e.stopPropagation();
+    const card = btn.closest('.card');
+    const open = card.classList.toggle('show-details');
+    btn.textContent = open ? '×' : '+';
+    btn.setAttribute('aria-label', open ? 'Hide track details' : 'Show track details');
   });
 });
 
