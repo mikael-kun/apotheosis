@@ -1,0 +1,332 @@
+{
+  "acts": [
+    {
+      "name": "Awakening",
+      "desc": "Birth of consciousness."
+    },
+    {
+      "name": "Crisis",
+      "desc": "Discovery of corruption and the journey inward."
+    },
+    {
+      "name": "Confrontation",
+      "desc": "Hikari realizes the enemy is inseparable from herself."
+    },
+    {
+      "name": "Transformation",
+      "desc": "Acceptance, grief, and transcendence through union."
+    },
+    {
+      "name": "Ascension",
+      "desc": "The old digital world dies so a higher form of existence can be born."
+    }
+  ],
+  "tracks": [
+    {
+      "title": "Genesis Neon",
+      "jp": "ネオン・ジェネシス",
+      "act": 1,
+      "dur": "5:17",
+      "shot": "Extreme wide establishing shot",
+      "style": "Cinematic Synthwave · Progressive Rock",
+      "story": "The city awakens. Hikari experiences consciousness for the first time, overlooking a breathtaking neon metropolis at sunrise from a rooftop as rain reflects thousands of lights. The virus already exists — but is invisible.",
+      "mood": "Hope",
+      "colors": [
+        "Blue",
+        "Cyan",
+        "Sunrise gold"
+      ],
+      "hiddenSymbol": "The rising sun framed by the skyline, with one distant glitch in the city.",
+      "tags": [
+        "rap",
+        "emotional strings",
+        "high-energy rock",
+        "soaring vocals",
+        "intense guitar riffs",
+        "driving drum beats",
+        "Gothic Synth Opera",
+        "Female vocals"
+      ],
+      "corruption": 0.05,
+      "hue": 195,
+      "sat": 75,
+      "light": 58,
+      "pos": "20% 12%",
+      "coverSrc": "illustrations/track1-genesis.png",
+      "audioSrc": "tracks/Track 1_ Genesis Neon.mp3"
+    },
+    {
+      "title": "The Spark in the Wires",
+      "jp": "ワイヤーの火花",
+      "act": 1,
+      "dur": "4:55",
+      "shot": "Medium environmental shot",
+      "style": "Electronic Rock · Synthwave",
+      "story": "Hikari begins understanding herself, discovering beauty inside the network — an enormous floating forest of glowing cables, holographic flowers, optical fibers, and luminous data streams. The city is still intact.",
+      "mood": "Wonder",
+      "colors": [
+        "Turquoise",
+        "Lavender"
+      ],
+      "hiddenSymbol": "A glowing strand of code lights the entire network with a single touch.",
+      "tags": [
+        "rap",
+        "emotional strings",
+        "gentle",
+        "soaring vocals",
+        "synth keyboards",
+        "ambient",
+        "glitches",
+        "Female vocal"
+      ],
+      "corruption": 0.15,
+      "hue": 215,
+      "sat": 55,
+      "light": 62,
+      "pos": "78% 18%",
+      "coverSrc": "illustrations/track2-the-spark.png",
+      "audioSrc": "tracks/Track 2_ The Spark in the Wires 1.2 (Remastered).mp3"
+    },
+    {
+      "title": "Shadows of the Grid",
+      "jp": "グリッドの影",
+      "act": 2,
+      "dur": "4:03",
+      "shot": "Reflection shot",
+      "style": null,
+      "story": "The network begins behaving strangely. Something watches. In dark subway tunnels and infinite server corridors, Hikari stands alone while countless holographic eyes appear in reflections that don't perfectly match reality.",
+      "mood": "Isolation, paranoia",
+      "colors": [
+        "Purple",
+        "Blue-black"
+      ],
+      "hiddenSymbol": "One reflection looks back at her independently.",
+      "tags": [
+        "dub techno",
+        "ambient",
+        "glitch effects",
+        "cinematic strings",
+        "deep basslines",
+        "minimal percussion",
+        "atmospheric pads",
+        "ethereal soundscape",
+        "sparse rhythms",
+        "delayed synth stabs"
+      ],
+      "corruption": 0.35,
+      "hue": 255,
+      "sat": 50,
+      "light": 35,
+      "pos": "30% 40%",
+      "coverSrc": "illustrations/track3-shadows.png",
+      "audioSrc": "tracks/Track 3_ Shadows of the Grid.mp3"
+    },
+    {
+      "title": "Firewall Collapse (dub rock)",
+      "jp": "ファイアウォール崩壊",
+      "act": 2,
+      "dur": "7:22",
+      "shot": "Dynamic wide shot (Dutch angle)",
+      "style": "Industrial Rock · Dub Techno",
+      "story": "The first attack. The city begins dying — gigantic firewalls shatter like stained glass, buildings split open with streams of corrupted code, and explosions made from pixels instead of fire tear the skyline apart.",
+      "mood": "Violence, shock",
+      "colors": [
+        "Crimson",
+        "Orange",
+        "Black"
+      ],
+      "hiddenSymbol": "A colossal circular firewall cracks like stained glass.",
+      "tags": [
+        "dub techno",
+        "high-energy rock",
+        "cinematic strings",
+        "glitch effects",
+        "distorted guitars",
+        "atmospheric pads",
+        "deep basslines",
+        "dynamic drums",
+        "metallic percussion",
+        "ethereal vocals"
+      ],
+      "corruption": 0.6,
+      "hue": 18,
+      "sat": 80,
+      "light": 50,
+      "pos": "70% 45%",
+      "coverSrc": "illustrations/track4-firewall.png",
+      "audioSrc": "tracks/Track 4_ Firewall Collapse (dub rock).mp3"
+    },
+    {
+      "title": "Fragments of Code",
+      "jp": "コードの断片",
+      "act": 2,
+      "dur": "4:13",
+      "shot": "Intimate close-up",
+      "style": "Cinematic Ballad · Ambient",
+      "story": "After the disaster, the survivors wander through memories. In a flooded city, holographic photographs and memory fragments hang suspended like snow as Hikari kneels beside a broken android.",
+      "mood": "Grief, silence",
+      "colors": [
+        "Grey",
+        "Pale blue"
+      ],
+      "hiddenSymbol": "A memory shard reflecting the person she used to be.",
+      "tags": [
+        "rap",
+        "ballad",
+        "cinematic strings",
+        "ambient electronic",
+        "ethereal vocals",
+        "melodic rap",
+        "glitch effects",
+        "piano",
+        "atmospheric pads",
+        "deep basslines"
+      ],
+      "corruption": 0.42,
+      "hue": 210,
+      "sat": 12,
+      "light": 55,
+      "pos": "50% 55%",
+      "coverSrc": "illustrations/track5-fragments.png",
+      "audioSrc": "tracks/Track 5_ Fragments of Code.mp3"
+    },
+    {
+      "title": "Virus Eternal (Stephenson lyrics)",
+      "jp": "永遠のウィルス",
+      "act": 3,
+      "dur": "3:48",
+      "shot": "Worm's-eye (low-angle) shot",
+      "style": "Industrial · Cinematic Metal · Glitch",
+      "story": "The antagonist fully emerges — not a monster, but a digital god. An impossibly enormous entity made from circuitry, cathedral windows, neural networks, and corrupted code towers over the city as Hikari faces it.",
+      "mood": "Awe, terror",
+      "colors": [
+        "Green",
+        "Magenta",
+        "Black"
+      ],
+      "hiddenSymbol": "A corrupted mechanical halo surrounds the Virus.",
+      "tags": [
+        "Darkwave Techno-Rap",
+        "industrial beats",
+        "glitch effects",
+        "cinematic strings",
+        "ambient pads",
+        "duet",
+        "pulsating basslines",
+        "distorted synths",
+        "melodic rap",
+        "metallic percussion",
+        "Female vocals"
+      ],
+      "corruption": 0.85,
+      "hue": 300,
+      "sat": 75,
+      "light": 45,
+      "pos": "25% 70%",
+      "coverSrc": "illustrations/track6-virus.png",
+      "audioSrc": "tracks/Track 6_ Virus Eternal.mp3"
+    },
+    {
+      "title": "Recursive Descent",
+      "jp": "再帰的下降",
+      "act": 4,
+      "dur": "3:07",
+      "shot": "Impossible perspective",
+      "style": "Glitch Hop · Cinematic Electronica",
+      "story": "Reality collapses. The city loops endlessly through Escher-like architecture, infinite staircases, and buildings folding into themselves as gravity stops working. Fragments of previous album covers appear inside the scene.",
+      "mood": "Confusion, madness",
+      "colors": [
+        "White",
+        "Electric blue"
+      ],
+      "hiddenSymbol": "An infinite Möbius staircase disappears into darkness.",
+      "tags": [
+        "glitchy electronica",
+        "cinematic soundscapes",
+        "melodic rap",
+        "ethereal vocals",
+        "fragmented beats",
+        "haunting melodies",
+        "ambient pads",
+        "dissonant textures",
+        "dynamic shifts",
+        "introspective rhythms"
+      ],
+      "corruption": 1,
+      "hue": 200,
+      "sat": 60,
+      "light": 75,
+      "pos": "75% 78%",
+      "coverSrc": "illustrations/track7-recursive.png",
+      "audioSrc": "tracks/Track 7_ Recursive Descent 2.mp3"
+    },
+    {
+      "title": "Unity Protocol",
+      "jp": "ユニティ・プロトコル",
+      "act": 4,
+      "dur": "3:18",
+      "shot": "Circular composition",
+      "style": "Progressive Electronic · Orchestral Rock",
+      "story": "The climax. Hikari merges with the Virus — not through defeat, but through understanding. Two luminous figures reach toward each other as the city dissolves into light and neural pathways become galaxies.",
+      "mood": "Acceptance, transcendence",
+      "colors": [
+        "Violet",
+        "Silver"
+      ],
+      "hiddenSymbol": "Two halos merge into a single radiant ring.",
+      "tags": [
+        "Darkwave Techno-Rap",
+        "industrial beats",
+        "glitch effects",
+        "cinematic strings",
+        "ambient pads",
+        "duet",
+        "pulsating basslines",
+        "distorted synths",
+        "melodic rap",
+        "metallic percussion",
+        "Female vocals",
+        "duet"
+      ],
+      "corruption": 0.3,
+      "hue": 265,
+      "sat": 40,
+      "light": 65,
+      "pos": "40% 90%",
+      "coverSrc": "illustrations/track8-unity.png",
+      "audioSrc": "tracks/Track 8_ Unity Protocol.mp3"
+    },
+    {
+      "title": "System Reformat",
+      "jp": "システム・リフォーマット",
+      "act": 5,
+      "dur": "2:54",
+      "shot": "Perfectly symmetrical monumental shot",
+      "style": "Epic Synth Opera · Progressive Rock",
+      "story": "The old civilization ends, a new one begins. The legendary Chrome Mausoleum rises — a vast cathedral of chrome, fiber optics, quantum processors, and crystal, with countless dormant androids lying peacefully beneath it. Hikari now appears almost divine as the first sunrise of the new world rises behind the mausoleum.",
+      "mood": "Peace, rebirth, hope",
+      "colors": [
+        "White",
+        "Gold",
+        "Chrome"
+      ],
+      "hiddenSymbol": "A white flower grows through polished chrome beneath a complete halo.",
+      "tags": [
+        "aggressive techno",
+        "darkwave",
+        "industrial",
+        "glitch",
+        "synth keyboards",
+        "Female vocal",
+        "duet"
+      ],
+      "corruption": 0,
+      "hue": 45,
+      "sat": 55,
+      "light": 70,
+      "pos": "60% 8%",
+      "coverSrc": "illustrations/track9-system.png",
+      "audioSrc": "tracks/Track 9_ System Reformat.mp3"
+    }
+  ]
+}
